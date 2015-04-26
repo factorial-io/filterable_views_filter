@@ -59,6 +59,10 @@ class filterable_views_filter_exposed_form_plugin extends views_plugin_exposed_f
 
       // Skip all non form elements except submit.
       if (substr($key, 0, 1) != '#' && $key != 'submit') {
+        // Skip exposed sorting for now.
+        if (!array_key_exists('filter-' . $key, $form['#info'])) {
+          continue;
+        }
         $element['#suffix'] = theme('filterable_views_filter_close', array('text' => 'X'));
         // Alternative try rendering of the labels.
         $element['#prefix'] = '<label>' . $options['filter-' . $key] . '</label>';
