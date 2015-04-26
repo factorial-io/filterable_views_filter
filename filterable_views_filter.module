@@ -30,3 +30,20 @@ function filterable_views_filter_init() {
     unset($_GET['filterable_views_filter']);
   }
 }
+/**
+ * Implements hook_theme().
+ *
+ * Adds a theming function for the close element.
+ */
+function filterable_views_filter_theme($existing, $type, $theme, $path) {
+  return array(
+    'filterable_views_filter_close' => array(
+      'template' => 'filterable-views-filter-close',
+      'path' => $path . '/templates',
+      'type' => 'theme',
+      'variables' => array(
+        'text' => NULL,
+      ),
+    ),
+  );
+}
