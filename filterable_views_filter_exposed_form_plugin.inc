@@ -17,7 +17,7 @@ class filterable_views_filter_exposed_form_plugin extends views_plugin_exposed_f
     $options = parent::option_definition();
 
     // @TODO: add an option to choose which filters to hide.
-    $options['pvf'] = array('default' => array());
+    $options['test'] = array('default' => array());
 
     // @TODO: still needed?
     // Options for the input required setting.
@@ -59,9 +59,8 @@ class filterable_views_filter_exposed_form_plugin extends views_plugin_exposed_f
 
       // Skip all non form elements except submit.
       if (substr($key, 0, 1) != '#' && $key != 'submit') {
-        // @TODO: create a theming function.
-        $element['#suffix'] = '<div class="state-close">X</div>';
-        // @TODO: try rendering the labels.
+        $element['#suffix'] = theme('filterable_views_filter_close', array('text' => 'X'));
+        // Alternative try rendering of the labels.
         $element['#prefix'] = '<label>' . $options['filter-' . $key] . '</label>';
 
         // Fix checkboxes with no values.
@@ -87,11 +86,11 @@ class filterable_views_filter_exposed_form_plugin extends views_plugin_exposed_f
         // Hide the elements by default when no value is set.
         if (!isset($form_state['input'][$key]) || $form_state['input'][$key] == '' || $form_state['input'][$key] == 'All') {
           $form[$key]['#attributes']['class'][] = 'element-hidden';
-          // Save default values.
         }
         else {
           $form[$key]['#attributes']['class'][] = 'element-not-hidden';
         }
+        // Save default values.
         $defaults['filter-' . $key] = $element['#default_value'];
       }
     }
@@ -123,10 +122,9 @@ class filterable_views_filter_exposed_form_plugin extends views_plugin_exposed_f
         'operator'  => '',
         'value'  => 'filterable_views_filter',
         'description'  => '',
-        '#weight'  => '',
+        '#weight'  => -100,
       ),
     ) + $form['#info'];
-
   }
 
   /**
@@ -152,4 +150,5 @@ class filterable_views_filter_exposed_form_plugin extends views_plugin_exposed_f
       return TRUE;
     }
   }
+
 }
