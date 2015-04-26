@@ -2,8 +2,9 @@
 /**
  * @file
  * Provides an Better Exposed Filters exposed form plugin for View 3.x.
+ *
  * The form should use #states and a multiple select but this is blocked
- * by core issue: #1149078
+ * by core issue: #1149078.
  */
 
 class filterable_views_filter_exposed_form_plugin extends views_plugin_exposed_form_basic {
@@ -23,7 +24,6 @@ class filterable_views_filter_exposed_form_plugin extends views_plugin_exposed_f
     $options['input_required'] = array('default' => FALSE);
     $options['text_input_required'] = array('default' => t('Select any filter and click on Apply to see results'), 'translatable' => TRUE);
     $options['text_input_required_format'] = array('default' => NULL);
-    // @TODO: Eventually add the ajax loading as option.
 
     return $options;
   }
@@ -36,9 +36,9 @@ class filterable_views_filter_exposed_form_plugin extends views_plugin_exposed_f
    * Tweak the exposed filter form to show Better Exposed Filter options.
    *
    * @param array $form
-   *   Exposed form array
+   *   Exposed form array.
    * @param array $form_state
-   *   Current state of form variables
+   *   Current state of form variables.
    */
   function exposed_form_alter(&$form, &$form_state) {
     parent::exposed_form_alter($form, $form_state);
@@ -99,28 +99,6 @@ class filterable_views_filter_exposed_form_plugin extends views_plugin_exposed_f
     // Pass the defaults to settings.
     drupal_add_js(array('filterable_views_filter' => $defaults), array('type' => 'setting'));
     $this::addSelectElement($form, $options);
-
-    // AJAXifying the form.
-
-    // $ajaxify = array(
-    //   'callback' => 'filterable_views_filter_ajax_callback',
-    //   'event' => 'change',
-    //   'wrapper' => 'filterable_views_filter-exposed-form-wrapper',
-    //   'keypress' => TRUE,
-    // );
-
-    // $form['submit']['#ajax'] = $ajaxify;
-    // $form['submit']['#prefix'] = '<div id="filterable_views_filter-exposed-form-wrapper">';
-    // $form['submit']['#suffix'] = '</div>';
-
-    // // AJAX behaviors need these data, so we add it back in #after_build.
-    // // @see : https://www.drupal.org/node/1183418
-    // $form['#after_build'][] = 'filterable_views_filter_exposed_form_ajax_enable';
-
-    // $this::addAjaxAttributes($form, $ajaxify, array('filterable_views_filter_filter', 'submit'));
-
-    // Hide the submit button.
-    // $form['submit']['#attributes']['class'][] = 'element-hidden';
   }
 
 
@@ -143,39 +121,12 @@ class filterable_views_filter_exposed_form_plugin extends views_plugin_exposed_f
     $form['#info'] = array(
       'filter-filterable_views_filter_filter' => array(
         'operator'  => '',
-        'value'  => 'filterable_views_filter_filter',
+        'value'  => 'filterable_views_filter',
         'description'  => '',
         '#weight'  => '',
       ),
     ) + $form['#info'];
 
-  }
-
-  /**
-   * Helper function to add ajax on elements.
-   * @param $element The element to be ajaxified.
-   * @param $exclude_keys  The element matching any values is the array is
-   *  excluded from ajaxifying.
-   */
-  private function addAjaxAttributes(&$element, $ajax_attributes, $exclude_keys = array()) {
-    $keys = element_children($element);
-    if ($keys AND is_array($keys)) {
-      foreach ($keys as $key) {
-        if (isset($element[$key]['#type'])) {
-          switch ($element[$key]['#type']) {
-            case 'container':
-            case 'fieldset':
-              $this::addAjaxAttributes($element[$key], $ajax_attributes, $exclude_keys);
-              break;
-            default:
-              if (!in_array($key, $exclude_keys)) {
-                $element[$key]['#ajax'] = $ajax_attributes;
-              }
-              break;
-          }
-        }
-      }
-    }
   }
 
   /**
