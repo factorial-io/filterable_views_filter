@@ -1,0 +1,6 @@
+name = Filterable views filter
+description = Views plugin to filter exposed filters.
+core = 7.x
+package = Views
+dependencies[] = views
+files[] = filterable_views_filter_exposed_form_plugia.inc
